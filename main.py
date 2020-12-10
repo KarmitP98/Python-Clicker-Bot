@@ -1,15 +1,20 @@
 # This is a sample Python script.
-import time
 import threading
-from pynput.mouse import Button, Controller
+import time
+
 from pynput.keyboard import Listener, KeyCode
+from pynput.mouse import Button, Controller
 
 # Press Shift+F10 to execute it or replace it with your code.
 # Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
 
-delay = 0.01
+# Frequency of Clicks per sec
+delay = 0.001
+# Click Button
 button = Button.left
+# Start Stop Key
 start_stop_key = KeyCode(char='s')
+# Exit Key
 exit_key = KeyCode(char='e')
 
 
@@ -24,13 +29,16 @@ class ClickMouse(threading.Thread):
 
     def start_clicking(self):
         self.running = True
+        print("Start Clicking")
 
     def stop_clicking(self):
         self.running = False
+        print("Stop Clicking")
 
     def exit(self):
         self.stop_clicking()
         self.program_running = False
+        print("Stop Program")
 
     def run(self):
         # While the whole program is running
@@ -47,9 +55,9 @@ class ClickMouse(threading.Thread):
 mouse = Controller()
 # Create a thread with the function of ClickMouse Class
 click_thread = ClickMouse(delay, button)
+# Make sure you start the thread at the end. Creates a delay for mounting the listener for some reason
 # Start the thread
 click_thread.start()
-
 
 def on_press(key):
     # If Key == "S"
@@ -71,4 +79,6 @@ def on_press(key):
 
 # Create Listener for "on_press" ? Not sure about this part
 with Listener(on_press=on_press) as listener:
+    print("Press 's' to Start Clicking...")
+    print("Listener Mounted")
     listener.join()
